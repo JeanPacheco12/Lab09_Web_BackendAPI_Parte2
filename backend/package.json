@@ -1,0 +1,47 @@
+{
+  "name": "module3-realestate-hub-api",
+  "version": "1.0.0",
+  "description": "API REST para el portal inmobiliario - Express + Prisma + SQLite",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [
+    "express",
+    "prisma",
+    "api",
+    "typescript",
+    "educational"
+  ],
+  "author": "Adrián Catalán",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.2.0",
+    "@prisma/client": "7.2.0",
+    "better-sqlite3": "^12.5.0",
+    "cors": "2.8.5",
+    "express": "5.2.1",
+    "zod": "4.1.9"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.17",
+    "@types/express": "5.0.0",
+    "@types/node": "22.10.2",
+    "eslint": "9.17.0",
+    "prettier": "3.4.2",
+    "prisma": "7.2.0",
+    "tsx": "4.19.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.18.2"
+  }
+}

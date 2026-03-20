@@ -1,0 +1,85 @@
+// =============================================================================
+// PRISMA SCHEMA - Module 3: RealEstate Hub API
+// =============================================================================
+// Este archivo define el esquema de la base de datos usando Prisma ORM.
+//
+// ## ¿Qué es Prisma?
+// Prisma es un ORM (Object-Relational Mapping) moderno para Node.js que:
+// - Genera tipos TypeScript automáticamente
+// - Proporciona un cliente de base de datos type-safe
+// - Facilita migraciones de esquema
+//
+// ## Paridad con Room (Android)
+// Este esquema está diseñado para ser equivalente al que usaríamos
+// con Room en Android, facilitando la consistencia entre plataformas.
+// =============================================================================
+
+// Configuración del generador de cliente
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Configuracion de la fuente de datos
+// SQLite es ideal para desarrollo y proyectos pequenos
+// En Prisma 7+, la URL se configura en prisma.config.ts
+datasource db {
+  provider = "sqlite"
+}
+
+// =============================================================================
+// MODELO: PROPERTY
+// =============================================================================
+// Representa una propiedad inmobiliaria.
+//
+// ## Notas sobre el diseño:
+// - Los tipos coinciden 1:1 con las interfaces de Module 2
+// - Usamos String para arrays serializados (limitación de SQLite)
+// - Las relaciones se manejarían con tablas separadas en producción
+// =============================================================================
+
+model Property {
+  // Identificador único (UUID generado por Prisma)
+  id          String   @id @default(cuid())
+
+  // Información básica
+  title       String
+  description String
+
+  // Tipo de propiedad: casa, apartamento, terreno, local, oficina
+  propertyType String  @map("property_type")
+
+  // Tipo de operación: venta, alquiler
+  operationType String @map("operation_type")
+
+  // Precio (en la moneda base de la aplicación)
+  price       Float
+
+  // Ubicación
+  address     String
+  city        String
+
+  // Características
+  bedrooms    Int      @default(0)
+  bathrooms   Int      @default(0)
+  area        Float
+
+  // Amenidades (almacenadas como JSON string)
+  // En SQLite no hay arrays nativos, usamos serialización
+  amenities   String   @default("[]")
+
+  // Imágenes (URLs almacenadas como JSON string)
+  images      String   @default("[]")
+
+  // Timestamps automáticos
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Índices para búsquedas eficientes
+  @@index([propertyType])
+  @@index([operationType])
+  @@index([city])
+  @@index([price])
+
+  // Nombre de la tabla en la base de datos
+  @@map("properties")
+}
