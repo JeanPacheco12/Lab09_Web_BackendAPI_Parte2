@@ -23,6 +23,7 @@ import {
   createProperty,
   updateProperty,
   deleteProperty,
+  getPropertyStats
 } from '../controllers/propertyController.js';
 
 const router = Router();
@@ -49,6 +50,15 @@ const router = Router();
  */
 router.get('/', (req, res) => {
   void getAllProperties(req, res);
+});
+
+// AÑADIMOS LA RUTA DE ESTADÍSTICAS AQUÍ (ANTES DE /:id)
+/**
+ * GET /api/properties/stats
+ * Obtiene las estadísticas del inventario de propiedades.
+ */
+router.get('/stats', (req, res) => {
+  void getPropertyStats(req, res);
 });
 
 /**
