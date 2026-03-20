@@ -264,3 +264,46 @@ export async function deleteProperty(req: Request, res: Response): Promise<void>
     });
   }
 }
+
+// =============================================================================
+// GET /api/properties/stats - Obtener estadísticas de propiedades
+// =============================================================================
+
+export async function getPropertyStats(_req: Request, res: Response): Promise<void> {
+  try {
+    // 1. Solicitamos los datos calculados al repositorio
+    const rawStats = await propertyRepository.getStats();
+
+    // 2. Transformamos el arreglo 'byType' a un objeto { house: X, apartment: Y }
+    // como lo pide la Definition of Done.
+    const countByType: Record<string, number> = {};
+    const averagePriceByType: Record<string, number> = {};
+
+    rawStats.byType.forEach(stat => {
+      // stat.type tiene valores como 'casa', 'apartamento', etc.
+      countByType[stat.type] = stat.count;
+      averagePriceByType[stat.type] = stat.averagePrice;
+    });
+
+    // 3. Estructuramos la respuesta final
+    res.json({
+      success: true,
+      data: {
+        totalCount: rawStats.totalCount,
+        countByType: countByType,
+        averagePrice: averagePriceByType,
+        priceRange: rawStats.priceRange
+      }
+    });
+
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Error interno al calcular estadísticas',
+        code: 'INTERNAL_ERROR',
+      },
+    });
+  }
+}
