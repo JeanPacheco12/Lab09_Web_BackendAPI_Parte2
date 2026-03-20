@@ -11,8 +11,13 @@
 // =============================================================================
 
 import { PrismaClient } from '@prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'; // 1. Hay que importar el adaptador.
 
-const prisma = new PrismaClient();
+// 2. Configurar el adaptador con la ruta a la base de datos.
+const adapter = new PrismaBetterSqlite3({ url: 'file:./prisma/dev.db' });
+
+// 3. Pasarle el adaptador al cliente de Prisma.
+const prisma = new PrismaClient({ adapter });
 
 // Datos de ejemplo (los mismos que en Module 2)
 const sampleProperties = [
