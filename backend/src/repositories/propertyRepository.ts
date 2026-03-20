@@ -209,6 +209,39 @@ export const propertyRepository = {
     });
     return property !== null;
   },
+
+  /**
+   * Obtiene estadísticas agregadas de las propiedades.
+   */
+  async getStats() {
+    // 1. Agregaciones globales (Total, Min, Max)
+    const globalStats = await prisma.property.aggregate({
+      _count: { id: true },
+      _min: { price: true },
+      _max: { price: true },
+    });
+
+    // 2. Estadísticas por tipo (Conteo y Promedio)
+    // Usamos groupBy para segmentar los datos por 'propertyType'
+    const typeStats = await prisma.property.groupBy({
+      by: ['propertyType'],
+      _count: { id: true },
+      _avg: { price: true },
+    });
+
+    return {
+      totalCount: globalStats._count.id || 0,
+      priceRange: {
+        min: globalStats._min.price || 0,
+        max: globalStats._max.price || 0,
+      },
+      byType: typeStats.map(stat => ({
+        type: stat.propertyType,
+        count: stat._count.id,
+        averagePrice: stat._avg.price || 0
+      }))
+    };
+  }
 };
 
 // =============================================================================
