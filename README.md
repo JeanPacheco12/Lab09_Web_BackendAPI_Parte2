@@ -17,4 +17,4 @@ Este repositorio contiene la segunda parte del lab de **EstateHub API**. El enfo
 *   **TypeScript** (Tipado estático seguro)
 
 ## Enlace para el video de la explicación de la parte 2
-[]
+[https://youtu.be/A_HSRVS0Zus]
